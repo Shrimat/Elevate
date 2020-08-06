@@ -34,7 +34,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/";
     private static final String ELEVATION_URL = "https://maps.googleapis.com/maps/api/elevation/";
     private static final String JSON_OUTPUT_FORMAT = "json";
-    private static final String API_KEY = "AIzaSyCvXeTMupCpQoZpEfxLQUopYs7XSjZfpjs";
+    private static final String API_KEY = BuildConfig.ApiKey;
     private static final int SAMPLING_DISTANCE = 20; //The distance between two consecutive points in metres
     private static final Cap CAP_TYPE = new RoundCap();
     private LatLng destination;
