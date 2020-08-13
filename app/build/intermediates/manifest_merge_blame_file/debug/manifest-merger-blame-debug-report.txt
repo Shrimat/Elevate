@@ -15,109 +15,117 @@
 13         Google Maps Android API v2, but you must specify either coarse or fine
 14         location permissions for the "MyLocation" functionality.
 15    -->
-16    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-16-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:10:5-79
-16-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:10:22-76
-17    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-17-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:11:5-84
-17-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:11:22-82
-18
-19    <!-- Include required permissions for Google Maps API to run. -->
-20    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-20-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:5-79
-20-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:22-76
-21    <uses-permission android:name="android.permission.INTERNET" />
-21-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:24:5-67
-21-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:24:22-64
-22
-23    <uses-feature
-23-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
-24        android:glEsVersion="0x00020000"
-24-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
-25        android:required="true" />
-25-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
-26
-27    <application
-27-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:13:5-45:19
-28        android:allowBackup="true"
-28-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:14:9-35
-29        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-29-->[androidx.core:core:1.1.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/76f2b6439d16df60df3177021482ee5a/core-1.1.0/AndroidManifest.xml:24:18-86
-30        android:debuggable="true"
-31        android:icon="@mipmap/ic_launcher"
-31-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:15:9-43
-32        android:label="@string/app_name"
-32-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:16:9-41
-33        android:roundIcon="@mipmap/ic_launcher_round"
-33-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:17:9-54
-34        android:supportsRtl="true"
-34-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:18:9-35
-35        android:testOnly="true"
-36        android:theme="@style/AppTheme" >
-36-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:19:9-40
-37        <receiver
-37-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:20:9-23:48
-38            android:name="com.example.elevate.GeofenceBroadcastReceiver"
-38-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:21:13-54
-39            android:enabled="true"
-39-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:22:13-35
-40            android:exported="true" />
-40-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:23:13-36
-41        <!--
-42             The API key for Google Maps-based APIs is defined as a string resource.
-43             (See the file "res/values/google_maps_api.xml").
-44             Note that the API key is linked to the encryption key used to sign the APK.
-45             You need a different API key for each encryption key, including the release key that is used to
-46             sign the APK for publishing.
-47             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-48        -->
-49        <meta-data
-49-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:32:9-34:55
-50            android:name="com.google.android.geo.API_KEY"
-50-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:33:13-58
-51            android:value="@string/google_maps_key" />
-51-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:34:13-52
-52
-53        <activity
-53-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:36:9-44:20
-54            android:name="com.example.elevate.MapsActivity"
-54-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:37:13-41
-55            android:label="@string/title_activity_maps" >
-55-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:38:13-56
-56            <intent-filter>
-56-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:39:13-43:29
-57                <action android:name="android.intent.action.MAIN" />
-57-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:40:17-69
-57-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:40:25-66
-58
-59                <category android:name="android.intent.category.LAUNCHER" />
-59-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:42:17-77
-59-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:42:27-74
-60            </intent-filter>
-61        </activity>
-62        <!-- Needs to be explicitly declared on P+ -->
-63        <uses-library
-63-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
-64            android:name="org.apache.http.legacy"
-64-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
-65            android:required="false" />
-65-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
-66
-67        <activity
-67-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
-68            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-68-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:24:13-79
-69            android:exported="false"
-69-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:25:13-37
-70            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-70-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:26:13-72
-71
-72        <meta-data
-72-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
-73            android:name="com.google.android.gms.version"
-73-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
-74            android:value="@integer/google_play_services_version" />
-74-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
-75    </application>
-76
-77</manifest>
+16    <uses-permission android:name="android.permission.INTERNET" />
+16-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:11:5-66
+16-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:11:22-64
+17    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+17-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:12:5-79
+17-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:12:22-76
+18    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+18-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:13:5-80
+18-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:13:22-78
+19    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+19-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:14:5-84
+19-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:14:22-82
+20    <uses-permission android:name="android.permission.VIBRATE" />
+20-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:15:5-65
+20-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:15:22-63
+21
+22    <!-- Include required permissions for Google Maps API to run. -->
+23    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+23-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:5-79
+23-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:23:22-76
+24
+25    <uses-feature
+25-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:26:5-28:35
+26        android:glEsVersion="0x00020000"
+26-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:27:9-41
+27        android:required="true" />
+27-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:28:9-32
+28
+29    <application
+29-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:17:5-51:19
+30        android:allowBackup="true"
+30-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:18:9-35
+31        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+31-->[androidx.core:core:1.1.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/76f2b6439d16df60df3177021482ee5a/core-1.1.0/AndroidManifest.xml:24:18-86
+32        android:debuggable="true"
+33        android:icon="@mipmap/ic_launcher"
+33-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:19:9-43
+34        android:label="@string/app_name"
+34-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:20:9-41
+35        android:roundIcon="@mipmap/ic_launcher_round"
+35-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:21:9-54
+36        android:supportsRtl="true"
+36-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:23:9-35
+37        android:testOnly="true"
+38        android:theme="@style/AppTheme"
+38-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:24:9-40
+39        android:usesCleartextTraffic="true" >
+39-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:22:9-44
+40        <receiver
+40-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:26:9-29:48
+41            android:name="com.example.elevate.geofences.GeofenceBroadcastReceiver"
+41-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:27:13-64
+42            android:enabled="true"
+42-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:28:13-35
+43            android:exported="true" />
+43-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:29:13-36
+44        <!--
+45             The API key for Google Maps-based APIs is defined as a string resource.
+46             (See the file "res/values/google_maps_api.xml").
+47             Note that the API key is linked to the encryption key used to sign the APK.
+48             You need a different API key for each encryption key, including the release key that is used to
+49             sign the APK for publishing.
+50             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+51        -->
+52        <meta-data
+52-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:38:9-40:55
+53            android:name="com.google.android.geo.API_KEY"
+53-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:39:13-58
+54            android:value="@string/google_maps_key" />
+54-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:40:13-52
+55
+56        <activity
+56-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:42:9-50:20
+57            android:name="com.example.elevate.MapsActivity"
+57-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:43:13-41
+58            android:label="@string/title_activity_maps" >
+58-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:44:13-56
+59            <intent-filter>
+59-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:45:13-49:29
+60                <action android:name="android.intent.action.MAIN" />
+60-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:46:17-69
+60-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:46:25-66
+61
+62                <category android:name="android.intent.category.LAUNCHER" />
+62-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:48:17-77
+62-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:48:27-74
+63            </intent-filter>
+64        </activity>
+65        <!-- Needs to be explicitly declared on P+ -->
+66        <uses-library
+66-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:33:9-35:40
+67            android:name="org.apache.http.legacy"
+67-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:34:13-50
+68            android:required="false" />
+68-->[com.google.android.gms:play-services-maps:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/7752dcb5f35954b62a1d54735ffd34b4/jetified-play-services-maps-17.0.0/AndroidManifest.xml:35:13-37
+69
+70        <activity
+70-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:23:9-26:75
+71            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+71-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:24:13-79
+72            android:exported="false"
+72-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:25:13-37
+73            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+73-->[com.google.android.gms:play-services-base:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/a1794986c7a3c4986f9feb2359005476/jetified-play-services-base-17.0.0/AndroidManifest.xml:26:13-72
+74
+75        <meta-data
+75-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:23:9-25:69
+76            android:name="com.google.android.gms.version"
+76-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
+77            android:value="@integer/google_play_services_version" />
+77-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
+78    </application>
+79
+80</manifest>
