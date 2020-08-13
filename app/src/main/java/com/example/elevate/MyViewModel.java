@@ -60,7 +60,8 @@ public class MyViewModel extends ViewModel {
                     map.addPolyline(polylineOptions);
                 }
 
-                pointsToAlertAt.postValue(pointsToAlertList);
+                //pointsToAlertAt.postValue(pointsToAlertList);
+                pointsToAlertAt.getValue().addAll(pointsToAlertList);
             });
         });
     }

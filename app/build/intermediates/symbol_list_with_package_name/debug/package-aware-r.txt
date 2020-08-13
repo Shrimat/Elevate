@@ -447,6 +447,7 @@ color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
 color dim_foreground_material_light
+color elevate_icon_background
 color error_color_material_dark
 color error_color_material_light
 color foreground_material_dark
@@ -692,6 +693,7 @@ drawable abc_textfield_search_activated_mtrl_alpha
 drawable abc_textfield_search_default_mtrl_alpha
 drawable abc_textfield_search_material
 drawable abc_vector_test
+drawable bicycle
 drawable btn_checkbox_checked_mtrl
 drawable btn_checkbox_checked_to_unchecked_mtrl_animation
 drawable btn_checkbox_unchecked_mtrl
@@ -798,11 +800,13 @@ id activity_chooser_view_content
 id add
 id adjust_height
 id adjust_width
+id after_logo_tv
 id alertTitle
 id always
 id async
 id auto
 id barrier
+id before_logo_tv
 id beginning
 id blocking
 id bottom
@@ -828,10 +832,12 @@ id edit_query
 id end
 id expand_activities_button
 id expanded_menu
+id footer_tv
 id forever
 id gone
 id group_divider
 id groups
+id header_tv
 id home
 id homeAsUp
 id hybrid
@@ -849,6 +855,7 @@ id line1
 id line3
 id listMode
 id list_item
+id logo
 id map
 id message
 id middle
@@ -892,6 +899,7 @@ id showCustom
 id showHome
 id showTitle
 id spacer
+id splash_wrapper_rl
 id split_action_bar
 id spread
 id spread_inside
@@ -982,9 +990,11 @@ layout notification_template_part_time
 layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
+layout splash
 layout support_simple_spinner_dropdown_item
-mipmap ic_launcher
-mipmap ic_launcher_round
+mipmap elevate_icon
+mipmap elevate_icon_foreground
+mipmap elevate_icon_round
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
@@ -1041,6 +1051,7 @@ style Animation_AppCompat_Dialog
 style Animation_AppCompat_DropDownUp
 style Animation_AppCompat_Tooltip
 style AppTheme
+style AppTheme_AppStyled
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog

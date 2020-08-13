@@ -45,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
     private MyViewModel viewModel;
-    private List<LatLng> pointsToAlert;
+    private MutableLiveData<List<LatLng>> pointsToAlert;
     private MutableLiveData<Location> currentLocation;
     private int currentID;
     private LatLng destination;
@@ -77,25 +77,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.geofenceHelper = new GeofenceHelper(this);
         this.viewModel = new MyViewModel();
         this.currentID = 1;
-        this.pointsToAlert = new ArrayList<>();
+        this.pointsToAlert = new MutableLiveData<>();
+        pointsToAlert.setValue(new ArrayList<>());
         this.currentLocation = new MutableLiveData<>();
         GeofenceBroadcastReceiver receiver = new GeofenceBroadcastReceiver();
         receiver.setMainActivityHandler(this);
         IntentFilter fltr_smsreceived = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(receiver,fltr_smsreceived);
-        viewModel.pointsToAlertAt.observe(MapsActivity.this, new Observer<List<LatLng>>() {
-            @Override
-            public void onChanged(List<LatLng> latLngs) {
-                pointsToAlert.addAll(latLngs);
-            }
+        viewModel.pointsToAlertAt.observe(this, latLngs -> {
+            pointsToAlert.getValue().addAll(latLngs);
         });
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        //Allows for zoom activity on map
-        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
         enableMyLocation();
         currentLocation.observe(this, location -> {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(
@@ -108,6 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void addMarkers() {
         map.setOnMapLongClickListener(latLng -> {
             map.clear();
+            geofencingClient.removeGeofences(geofenceHelper.getPendingIntent());
             destination = latLng;
             MarkerOptions myMarker = new MarkerOptions();
             myMarker.position(destination);
@@ -116,9 +114,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             map.addMarker(myMarker);
             polylineToMarker();
-            //addGeofence(new LatLng(currentLat, currentLng), GEOFENCE_RADIUS, "ID");
-            //addCircle(new LatLng(currentLat, currentLng), GEOFENCE_RADIUS);
-            System.out.println(pointsToAlert);
+            pointsToAlert.observe(this, points -> {
+                if (!points.isEmpty()) {
+                    addGeofence(points.get(0), GEOFENCE_RADIUS, "ID" + currentID);
+                    addCircle(points.get(0), GEOFENCE_RADIUS);
+                    points.remove(0);
+                }
+            });
         });
     }
 
@@ -145,6 +147,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
+    private void elevationCalculation(String encodedPath, int distance) {
+        String elevationURL = getElevationURL(encodedPath, distance);
+        viewModel.runTask(elevationURL, map);
+    }
+
     private String getDirectionURL(LatLng origin, LatLng dest) {
         String originString = "origin=" + origin.latitude + "," + origin.longitude;
         String destString = "destination=" + dest.latitude + "," + dest.longitude;
@@ -167,11 +174,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 + pathString + "&"
                 + samples + "&"
                 + key;
-    }
-
-    private void elevationCalculation(String encodedPath, int distance) {
-        String elevationURL = getElevationURL(encodedPath, distance);
-        viewModel.runTask(elevationURL, map);
     }
 
     private void addGeofence(LatLng centre, float radius, String ID) {
@@ -206,12 +208,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<String> geofencesToRemove = new ArrayList<>();
         geofencesToRemove.add(oldGeofenceID);
         geofencingClient.removeGeofences(geofencesToRemove);
-        if (!pointsToAlert.isEmpty()) {
-            pointsToAlert.remove(0);
+        if (!pointsToAlert.getValue().isEmpty()) {
+            pointsToAlert.getValue().remove(0);
         }
         currentID++;
-        addGeofence(pointsToAlert.get(0), GEOFENCE_RADIUS, "ID" + currentID);
-        addCircle(pointsToAlert.get(0), GEOFENCE_RADIUS);
+        addGeofence(pointsToAlert.getValue().get(0), GEOFENCE_RADIUS, "ID" + currentID);
+        addCircle(pointsToAlert.getValue().get(0), GEOFENCE_RADIUS);
     }
 
     private void enableMyLocation() {
