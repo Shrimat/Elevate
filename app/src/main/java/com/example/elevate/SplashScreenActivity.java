@@ -17,7 +17,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         EasySplashScreen config = new EasySplashScreen(this)
                 .withFullScreen()
                 .withTargetActivity(MapsActivity.class)
-                .withSplashTimeOut(3000)
+                .withSplashTimeOut(2000)
                 .withBackgroundColor(Color.WHITE)
                 .withAfterLogoText("Elevate")
                 .withLogo(R.mipmap.elevate_icon);

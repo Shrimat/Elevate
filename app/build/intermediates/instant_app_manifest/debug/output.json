@@ -21,7 +21,7 @@
       "properties": {
         "packageId": "com.example.elevate",
         "split": "",
-        "minSdkVersion": "19"
+        "minSdkVersion": "21"
       }
     }
   ]

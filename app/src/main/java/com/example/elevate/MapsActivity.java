@@ -6,24 +6,22 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import com.example.elevate.directions.DirectionsTaskParser;
 import com.example.elevate.geofences.GeofenceBroadcastReceiver;
 import com.example.elevate.geofences.GeofenceHelper;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
-import com.google.android.gms.location.GeofencingEvent;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -34,9 +32,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, LocationManager.locationSuccessListener {
@@ -44,9 +41,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap map;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
-    private MyViewModel viewModel;
-    private MutableLiveData<List<LatLng>> pointsToAlert;
+    private InsertMapElementsViewModel viewModel;
     private MutableLiveData<Location> currentLocation;
+    private BottomNavigationView bottomNavigationView;
     private int currentID;
     private LatLng destination;
 
@@ -67,39 +64,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        assert mapFragment != null;
+//        mapFragment.getMapAsync(this);
+
+        this.bottomNavigationView = findViewById(R.id.bottomNav);
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapViewFragment());
         this.geofencingClient = LocationServices.getGeofencingClient(this);
         LocationManager.createInstance(LocationServices.getFusedLocationProviderClient(this));
         LocationManager.getInstance().setLocation(this);
         this.geofenceHelper = new GeofenceHelper(this);
-        this.viewModel = new MyViewModel();
+        this.viewModel = new InsertMapElementsViewModel();
         this.currentID = 1;
-        this.pointsToAlert = new MutableLiveData<>();
-        pointsToAlert.setValue(new ArrayList<>());
         this.currentLocation = new MutableLiveData<>();
         GeofenceBroadcastReceiver receiver = new GeofenceBroadcastReceiver();
         receiver.setMainActivityHandler(this);
         IntentFilter fltr_smsreceived = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
         registerReceiver(receiver,fltr_smsreceived);
         viewModel.pointsToAlertAt.observe(this, latLngs -> {
-            pointsToAlert.getValue().addAll(latLngs);
+            for (LatLng position : latLngs) {
+                addCircle(position, GEOFENCE_RADIUS);
+                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
+                currentID++;
+            }
         });
     }
+
+    private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new
+            BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                    Fragment fragment = null;
+
+                    switch (item.getItemId()) {
+                        case R.id.maps:
+                            fragment = new MapViewFragment();
+                    }
+                    getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+                    return true;
+                }
+            };
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
         enableMyLocation();
-        currentLocation.observe(this, location -> {
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                    new LatLng(location.getLatitude(), location.getLongitude()), ZOOM));
-        });
+        currentLocation.observe(this, location ->
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                        location.getLongitude()), ZOOM)));
         addMarkers();
-
     }
 
     private void addMarkers() {
@@ -114,13 +130,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             map.addMarker(myMarker);
             polylineToMarker();
-            pointsToAlert.observe(this, points -> {
-                if (!points.isEmpty()) {
-                    addGeofence(points.get(0), GEOFENCE_RADIUS, "ID" + currentID);
-                    addCircle(points.get(0), GEOFENCE_RADIUS);
-                    points.remove(0);
-                }
-            });
         });
     }
 
@@ -178,7 +187,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void addGeofence(LatLng centre, float radius, String ID) {
         Geofence geofence = geofenceHelper.getGeofence(ID, centre, radius,
-                Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL | Geofence.GEOFENCE_TRANSITION_EXIT);
+                Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL);
         GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
         PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
 
@@ -202,18 +211,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .strokeColor(Color.argb(255, 255, 0, 0))
                 .fillColor(Color.argb(64, 255, 0, 0))
                 .strokeWidth(4));
-    }
-
-    public void transitionRemoveGeofence(String oldGeofenceID) {
-        List<String> geofencesToRemove = new ArrayList<>();
-        geofencesToRemove.add(oldGeofenceID);
-        geofencingClient.removeGeofences(geofencesToRemove);
-        if (!pointsToAlert.getValue().isEmpty()) {
-            pointsToAlert.getValue().remove(0);
-        }
-        currentID++;
-        addGeofence(pointsToAlert.getValue().get(0), GEOFENCE_RADIUS, "ID" + currentID);
-        addCircle(pointsToAlert.getValue().get(0), GEOFENCE_RADIUS);
     }
 
     private void enableMyLocation() {

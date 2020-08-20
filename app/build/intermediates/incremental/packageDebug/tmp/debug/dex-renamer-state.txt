@@ -1,4 +1,7 @@
-#Fri Aug 14 00:23:18 BST 2020
-base.0=/Users/shrimatkapoor/Elevate/app/build/intermediates/dex/debug/mergeDexDebug/classes.dex
+#Thu Aug 20 23:52:49 BST 2020
+base.0=/Users/shrimatkapoor/Elevate/app/build/intermediates/dex/debug/mergeExtDexDebug/classes.dex
+path.1=classes.dex
+renamed.1=classes2.dex
 path.0=classes.dex
 renamed.0=classes.dex
+base.1=/Users/shrimatkapoor/Elevate/app/build/intermediates/dex/debug/mergeProjectDexDebug/classes.dex

@@ -13,6 +13,7 @@ import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
@@ -25,9 +26,8 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        TextToSpeech mTTS;
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
-//        mTTS = new TextToSpeech(context, status -> {
+//        TextToSpeech mTTS = new TextToSpeech(context, status -> {
 //            if (status == TextToSpeech.SUCCESS) {
 //                int result = mTTS.setLanguage(Locale.ENGLISH);
 //                if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED) {
@@ -51,7 +51,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_ENTER", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Elevation alert", Toast.LENGTH_SHORT).show();
 //                mTTS.setPitch(1.0f);
 //                mTTS.setSpeechRate(1.0f);
 //                mTTS.speak("In 100 metres elevation reaches blah", TextToSpeech.QUEUE_FLUSH, null);
@@ -67,18 +67,14 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 //                }
 
                 break;
-            case Geofence.GEOFENCE_TRANSITION_EXIT :
-                Toast.makeText(context, "GEOFENCE_TRANSITION_EXIT", Toast.LENGTH_SHORT).show();
+            case Geofence.GEOFENCE_TRANSITION_DWELL :
+                Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
                 List<Geofence> triggeredGeofences = geofencingEvent.getTriggeringGeofences();
                 List<String> toRemove = new ArrayList<>();
                 for (Geofence geofence : triggeredGeofences) {
                     toRemove.add(geofence.getRequestId());
                 }
-                //main.transitionRemoveGeofence(toRemove.get(0));
-                main.transitionRemoveGeofence("ID");
-                break;
-            case Geofence.GEOFENCE_TRANSITION_DWELL :
-                Toast.makeText(context, "GEOFENCE_TRANSITION_DWELL", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
