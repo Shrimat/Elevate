@@ -2,7 +2,6 @@ package com.example.elevate;
 
 import android.Manifest;
 import android.app.PendingIntent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -18,16 +17,15 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.elevate.directions.DirectionsTaskParser;
-import com.example.elevate.geofences.GeofenceBroadcastReceiver;
 import com.example.elevate.geofences.GeofenceHelper;
+import com.example.elevate.location.LocationManager;
+import com.example.elevate.maps.MapViewModel;
+import com.example.elevate.maps.MapFragment;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -41,7 +39,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap map;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
-    private InsertMapElementsViewModel viewModel;
+    private MapViewModel viewModel;
     private MutableLiveData<Location> currentLocation;
     private BottomNavigationView bottomNavigationView;
     private int currentID;
@@ -71,25 +69,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         this.bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavMethod);
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapViewFragment());
-        this.geofencingClient = LocationServices.getGeofencingClient(this);
-        LocationManager.createInstance(LocationServices.getFusedLocationProviderClient(this));
-        LocationManager.getInstance().setLocation(this);
-        this.geofenceHelper = new GeofenceHelper(this);
-        this.viewModel = new InsertMapElementsViewModel();
-        this.currentID = 1;
-        this.currentLocation = new MutableLiveData<>();
-        GeofenceBroadcastReceiver receiver = new GeofenceBroadcastReceiver();
-        receiver.setMainActivityHandler(this);
-        IntentFilter fltr_smsreceived = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
-        registerReceiver(receiver,fltr_smsreceived);
-        viewModel.pointsToAlertAt.observe(this, latLngs -> {
-            for (LatLng position : latLngs) {
-                addCircle(position, GEOFENCE_RADIUS);
-                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
-                currentID++;
-            }
-        });
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, new MapFragment());
+//        this.geofencingClient = LocationServices.getGeofencingClient(this);
+//        LocationManager.createInstance(LocationServices.getFusedLocationProviderClient(this));
+//        LocationManager.getInstance().setLocation(this);
+//        this.geofenceHelper = new GeofenceHelper(this);
+//        this.viewModel = new InsertMapElementsViewModel();
+//        this.currentID = 1;
+//        this.currentLocation = new MutableLiveData<>();
+//        GeofenceBroadcastReceiver receiver = new GeofenceBroadcastReceiver();
+//        receiver.setMainActivityHandler(this);
+//        IntentFilter fltr_smsreceived = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+//        registerReceiver(receiver,fltr_smsreceived);
+//        viewModel.pointsToAlertAt.observe(this, latLngs -> {
+//            for (LatLng position : latLngs) {
+//                addCircle(position, GEOFENCE_RADIUS);
+//                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
+//                currentID++;
+//            }
+//        });
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener bottomNavMethod = new
@@ -100,7 +98,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                     switch (item.getItemId()) {
                         case R.id.maps:
-                            fragment = new MapViewFragment();
+                            fragment = new MapFragment();
                     }
                     getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
                     return true;
@@ -109,13 +107,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
-        enableMyLocation();
-        currentLocation.observe(this, location ->
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                        location.getLongitude()), ZOOM)));
-        addMarkers();
+//        map = googleMap;
+//        map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
+//        enableMyLocation();
+//        currentLocation.observe(this, location ->
+//                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+//                        location.getLongitude()), ZOOM)));
+//        addMarkers();
     }
 
     private void addMarkers() {
@@ -244,7 +242,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onLocationReceived() {
         currentLocation.setValue(LocationManager.getInstance().getMyCurrentLocation());
-        System.out.println("triggered1");
         if (currentLocation == null){
             Toast.makeText(this, "unable to get location", Toast.LENGTH_SHORT).show();
         }
