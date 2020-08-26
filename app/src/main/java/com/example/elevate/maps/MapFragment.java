@@ -3,6 +3,7 @@ package com.example.elevate.maps;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.elevate.BuildConfig;
@@ -58,7 +60,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_map_view, container, false);
 
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getParentFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         SupportMapFragment fragment = new SupportMapFragment();
         transaction.add(R.id.mapView, fragment);
@@ -66,9 +68,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         fragment.getMapAsync(this);
         this.locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
-        this.mapViewModel = new MapViewModel();
-        this.geofencingClient = LocationServices.getGeofencingClient(getActivity());
+        this.mapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
+        this.geofencingClient = LocationServices.getGeofencingClient(requireActivity());
         this.geofenceHelper = new GeofenceHelper(getActivity());
+        locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location ->
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                location.getLongitude()), ZOOM)));
         return view;
     }
 
@@ -77,9 +82,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
         enableMyLocation();
-        locationViewModel.getCurrentLocation().observe(this, location ->
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                        location.getLongitude()), ZOOM)));
         addMarkers();
     }
 
@@ -150,8 +152,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void enableMyLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     REQUEST_LOCATION_PERMISSION);
         } else {
             map.setMyLocationEnabled(true);

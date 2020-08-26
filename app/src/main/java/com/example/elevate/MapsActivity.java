@@ -97,8 +97,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     Fragment fragment = null;
 
                     switch (item.getItemId()) {
+                        case R.id.home:
+                            fragment = new HomeFragment();
+                            break;
                         case R.id.maps:
                             fragment = new MapFragment();
+                            break;
                     }
                     getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
                     return true;

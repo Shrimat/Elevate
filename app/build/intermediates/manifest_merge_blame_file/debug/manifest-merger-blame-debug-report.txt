@@ -47,7 +47,7 @@
 29        android:allowBackup="true"
 29-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:17:9-35
 30        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-30-->[androidx.core:core:1.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/4527d81fa1dab2c4adef56282f6f51b4/core-1.2.0/AndroidManifest.xml:24:18-86
+30-->[androidx.core:core:1.3.1] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/ae3468b444d41a56f261ecbb8448fe17/core-1.3.1/AndroidManifest.xml:24:18-86
 31        android:configChanges="orientation|keyboardHidden|screenSize"
 31-->[gr.pantrif:easy-android-splash-screen:0.0.1] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/c85e3ac63bc3dae0cd42e41cf11ffd31/jetified-easy-android-splash-screen-0.0.1/AndroidManifest.xml:14:9-70
 32        android:debuggable="true"
@@ -133,6 +133,17 @@
 80-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:24:13-58
 81            android:value="@integer/google_play_services_version" />
 81-->[com.google.android.gms:play-services-basement:17.0.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/294cc5ecc9001f3e94c034cd71f64fdf/jetified-play-services-basement-17.0.0/AndroidManifest.xml:25:13-66
-82    </application>
-83
-84</manifest>
+82
+83        <provider
+83-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/3af32d140be760521703c9060e27c1ae/jetified-lifecycle-process-2.2.0/AndroidManifest.xml:25:9-29:43
+84            android:name="androidx.lifecycle.ProcessLifecycleOwnerInitializer"
+84-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/3af32d140be760521703c9060e27c1ae/jetified-lifecycle-process-2.2.0/AndroidManifest.xml:26:13-79
+85            android:authorities="com.example.elevate.lifecycle-process"
+85-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/3af32d140be760521703c9060e27c1ae/jetified-lifecycle-process-2.2.0/AndroidManifest.xml:27:13-69
+86            android:exported="false"
+86-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/3af32d140be760521703c9060e27c1ae/jetified-lifecycle-process-2.2.0/AndroidManifest.xml:28:13-37
+87            android:multiprocess="true" />
+87-->[androidx.lifecycle:lifecycle-process:2.2.0] /Users/shrimatkapoor/.gradle/caches/transforms-2/files-2.1/3af32d140be760521703c9060e27c1ae/jetified-lifecycle-process-2.2.0/AndroidManifest.xml:29:13-40
+88    </application>
+89
+90</manifest>
