@@ -30,6 +30,8 @@ import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -41,6 +43,8 @@ import java.util.Map;
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap map;
+    private View view;
+    private MapView mapView;
     private LocationViewModel locationViewModel;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
@@ -58,7 +62,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_map_view, container, false);
+         view = inflater.inflate(R.layout.fragment_map_view, container, false);
 
         FragmentManager manager = getParentFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -74,15 +78,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location ->
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                 location.getLongitude()), ZOOM)));
+//        mapViewModel.getPointsToAlertAt().observe(this, latLngs -> {
+//            for (LatLng position : latLngs) {
+//                addCircle(position, GEOFENCE_RADIUS);
+//                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
+//                currentID++;
+//            }
+//        });
         return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        MapsInitializer.initialize(requireContext());
         map = googleMap;
+        map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
         enableMyLocation();
         addMarkers();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mapView  = (MapView) this.view.findViewById(R.id.mapView);
+        if (mapView != null) {
+            mapView.onCreate(null);
+            mapView.onResume();
+            mapView.getMapAsync(this);
+        }
     }
 
     private void addMarkers() {
@@ -177,6 +201,30 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 break;
             }
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mapView.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mapView.onDestroy();
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        mapView.onLowMemory();
     }
 
 
