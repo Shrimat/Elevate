@@ -56,6 +56,10 @@
         "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/drawable/ic_map.xml"
     },
     {
+        "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/layout_activity_main.xml.flat",
+        "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/layout/activity_main.xml"
+    },
+    {
         "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/mipmap-xxxhdpi_elevate_icon_foreground.png.flat",
         "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/mipmap-xxxhdpi/elevate_icon_foreground.png"
     },

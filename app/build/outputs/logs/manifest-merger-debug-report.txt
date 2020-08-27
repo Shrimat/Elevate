@@ -170,7 +170,7 @@ ADDED from /Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:46:9-48
 		ADDED from /Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:48:13-52
 	android:name
 		ADDED from /Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:47:13-58
-activity#com.example.elevate.MapsActivity
+activity#com.example.elevate.MainActivity
 ADDED from /Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:50:9-53:20
 	android:label
 		ADDED from /Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:52:13-56

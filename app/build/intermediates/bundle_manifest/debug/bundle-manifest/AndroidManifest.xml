@@ -62,7 +62,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name="com.example.elevate.MapsActivity"
+            android:name="com.example.elevate.MainActivity"
             android:label="@string/title_activity_maps" >
         </activity>
 

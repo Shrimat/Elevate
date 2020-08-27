@@ -104,7 +104,7 @@
 63
 64        <activity
 64-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:50:9-53:20
-65            android:name="com.example.elevate.MapsActivity"
+65            android:name="com.example.elevate.MainActivity"
 65-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:51:13-41
 66            android:label="@string/title_activity_maps" >
 66-->/Users/shrimatkapoor/Elevate/app/src/main/AndroidManifest.xml:52:13-56

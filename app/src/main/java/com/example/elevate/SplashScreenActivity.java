@@ -16,7 +16,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EasySplashScreen config = new EasySplashScreen(this)
                 .withFullScreen()
-                .withTargetActivity(MapsActivity.class)
+                .withTargetActivity(MainActivity.class)
                 .withSplashTimeOut(2000)
                 .withBackgroundColor(Color.WHITE)
                 .withAfterLogoText("Elevate")
