@@ -20,11 +20,13 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.elevate.BuildConfig;
+import com.example.elevate.MainActivity;
 import com.example.elevate.R;
 import com.example.elevate.TaskRequest;
 import com.example.elevate.TaskRunner;
 import com.example.elevate.directions.DirectionsTaskParser;
 import com.example.elevate.geofences.GeofenceHelper;
+import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.LocationServices;
@@ -71,13 +73,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         transaction.commit();
 
         fragment.getMapAsync(this);
-        this.locationViewModel = new ViewModelProvider(requireActivity()).get(LocationViewModel.class);
+
+        this.locationViewModel = ((MainActivity) getActivity()).getLocationViewModel();
         this.mapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
         this.geofencingClient = LocationServices.getGeofencingClient(requireActivity());
         this.geofenceHelper = new GeofenceHelper(getActivity());
-        locationViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location ->
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
-                location.getLongitude()), ZOOM)));
+
 //        mapViewModel.getPointsToAlertAt().observe(this, latLngs -> {
 //            for (LatLng position : latLngs) {
 //                addCircle(position, GEOFENCE_RADIUS);
@@ -95,6 +96,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
         enableMyLocation();
+        locationViewModel.getCurrentLocation().observe(this, location ->
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
+                        location.getLongitude()), ZOOM)));
         addMarkers();
     }
 
@@ -125,24 +129,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void polylineToMarker(LatLng destination) {
         if (destination != null) {
-            locationViewModel.getCurrentLocation().observe(this, location -> {
-                String directionURL = getDirectionURL(new LatLng(location.getLatitude(),
-                        location.getLongitude()), destination);
-                TaskRunner taskRunner1 = new TaskRunner();
-                taskRunner1.executeAsync(new TaskRequest(directionURL), (data1) -> {
-                    TaskRunner taskRunner2 = new TaskRunner();
-                    taskRunner2.executeAsync(new DirectionsTaskParser(data1), (data2) -> {
-
-                        for (Map<String, Integer> path : data2) {
-                            for (String encodedPath : path.keySet()) {
-
-                                elevationCalculation(encodedPath, path.get(encodedPath));
-                            }
-                        }
-
-                    });
-                });
-            });
+//            locationViewModel.getCurrentLocation().observe(this, location -> {
+//                String directionURL = getDirectionURL(new LatLng(location.getLatitude(),
+//                        location.getLongitude()), destination);
+//                TaskRunner taskRunner1 = new TaskRunner();
+//                taskRunner1.executeAsync(new TaskRequest(directionURL), (data1) -> {
+//                    TaskRunner taskRunner2 = new TaskRunner();
+//                    taskRunner2.executeAsync(new DirectionsTaskParser(data1), (data2) -> {
+//
+//                        for (Map<String, Integer> path : data2) {
+//                            for (String encodedPath : path.keySet()) {
+//
+//                                elevationCalculation(encodedPath, path.get(encodedPath));
+//                            }
+//                        }
+//
+//                    });
+//                });
+//            });
         }
     }
 
@@ -227,5 +231,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-
+    public GoogleMap getMap() {
+        return map;
+    }
 }
