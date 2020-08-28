@@ -2,9 +2,12 @@ package com.example.elevate.maps;
 
 
 import android.Manifest;
+import android.app.PendingIntent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +31,9 @@ import com.example.elevate.directions.DirectionsTaskParser;
 import com.example.elevate.geofences.GeofenceHelper;
 import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
+import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -37,6 +42,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -50,10 +56,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private LocationViewModel locationViewModel;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
+    private int currentID;
     private MapViewModel mapViewModel;
 
     private static final int REQUEST_LOCATION_PERMISSION = 1000;
     private static final int ZOOM = 15;
+    private static final String TAG = "MapsFragment";
     private static final int GEOFENCE_RADIUS = 150;
     private static final int SAMPLING_DISTANCE = 75; //The distance between two consecutive points in metres
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/";
@@ -64,7 +72,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.fragment_map_view, container, false);
+        view = inflater.inflate(R.layout.fragment_map_view, container, false);
 
         FragmentManager manager = getParentFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
@@ -79,13 +87,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         this.geofencingClient = LocationServices.getGeofencingClient(requireActivity());
         this.geofenceHelper = new GeofenceHelper(getActivity());
 
-//        mapViewModel.getPointsToAlertAt().observe(this, latLngs -> {
-//            for (LatLng position : latLngs) {
-//                addCircle(position, GEOFENCE_RADIUS);
-//                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
-//                currentID++;
-//            }
-//        });
+        mapViewModel.getPointsToAlertAt().observe(requireActivity(), latLngs -> {
+            for (LatLng position : latLngs) {
+                addCircle(position, GEOFENCE_RADIUS);
+                addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
+                currentID++;
+            }
+        });
         return view;
     }
 
@@ -129,24 +137,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void polylineToMarker(LatLng destination) {
         if (destination != null) {
-//            locationViewModel.getCurrentLocation().observe(this, location -> {
-//                String directionURL = getDirectionURL(new LatLng(location.getLatitude(),
-//                        location.getLongitude()), destination);
-//                TaskRunner taskRunner1 = new TaskRunner();
-//                taskRunner1.executeAsync(new TaskRequest(directionURL), (data1) -> {
-//                    TaskRunner taskRunner2 = new TaskRunner();
-//                    taskRunner2.executeAsync(new DirectionsTaskParser(data1), (data2) -> {
-//
-//                        for (Map<String, Integer> path : data2) {
-//                            for (String encodedPath : path.keySet()) {
-//
-//                                elevationCalculation(encodedPath, path.get(encodedPath));
-//                            }
-//                        }
-//
-//                    });
-//                });
-//            });
+            locationViewModel.getCurrentLocation().observe(this, location -> {
+                String directionURL = getDirectionURL(new LatLng(location.getLatitude(),
+                        location.getLongitude()), destination);
+                TaskRunner taskRunner1 = new TaskRunner();
+                taskRunner1.executeAsync(new TaskRequest(directionURL), (data1) -> {
+                    TaskRunner taskRunner2 = new TaskRunner();
+                    taskRunner2.executeAsync(new DirectionsTaskParser(data1), (data2) -> {
+
+                        for (Map<String, Integer> path : data2) {
+                            for (String encodedPath : path.keySet()) {
+
+                                elevationCalculation(encodedPath, path.get(encodedPath));
+                            }
+                        }
+
+                    });
+                });
+            });
         }
     }
 
@@ -179,6 +187,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 + key;
     }
 
+    //================================================================================
+    // Location functions
+    //================================================================================
+
     private void enableMyLocation() {
         if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -207,6 +219,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    //================================================================================
+    // Geofence functions
+    //================================================================================
+
+    private void addGeofence(LatLng centre, float radius, String ID) {
+        Geofence geofence = geofenceHelper.getGeofence(ID, centre, radius,
+                Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL);
+        GeofencingRequest geofencingRequest = geofenceHelper.getGeofencingRequest(geofence);
+        PendingIntent pendingIntent = geofenceHelper.getPendingIntent();
+
+        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //TODO: Add the permission check
+            return;
+        }
+
+        geofencingClient.addGeofences(geofencingRequest, pendingIntent)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "onSuccess: Geofence Added"))
+                .addOnFailureListener(e -> {
+                    String errorMessage = geofenceHelper.getErrorString(e);
+                    Log.d(TAG, "onFailure" + errorMessage);
+                });
+    }
+
+    private void addCircle(LatLng centre, float radius) {
+        map.addCircle(new CircleOptions()
+                .center(centre)
+                .radius(radius)
+                .strokeColor(Color.argb(255, 255, 0, 0))
+                .fillColor(Color.argb(64, 255, 0, 0))
+                .strokeWidth(4));
+    }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -229,9 +273,5 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onLowMemory() {
         super.onLowMemory();
         mapView.onLowMemory();
-    }
-
-    public GoogleMap getMap() {
-        return map;
     }
 }

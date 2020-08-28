@@ -1,11 +1,8 @@
 package com.example.elevate;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -14,9 +11,6 @@ import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
 import com.example.elevate.maps.MapFragment;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements LocationManager.locationSuccessListener{
@@ -24,8 +18,6 @@ public class MainActivity extends AppCompatActivity implements LocationManager.l
     private BottomNavigationView bottomNavigationView;
     private LocationViewModel locationViewModel;
     private MapFragment mapFragment;
-
-    private static final int ZOOM = 15;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements LocationManager.l
                 fragment = mapFragment;
                 break;
         }
-        getSupportFragmentManager().beginTransaction().add(R.id.container, fragment).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
         return true;
     };
 

@@ -13,8 +13,6 @@ public class LocationViewModel extends ViewModel {
         this.currentLocation = new MutableLiveData<>();
     }
 
-
-
     public MutableLiveData<Location> getCurrentLocation() {
         return currentLocation;
     }
