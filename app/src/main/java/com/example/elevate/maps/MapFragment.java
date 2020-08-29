@@ -103,9 +103,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 locationViewModel.getCurrentLocation().observe(requireActivity(), location ->
                         builder.include(new LatLng(location.getLatitude(), location.getLongitude())));
                 LatLngBounds bounds = builder.build();
-                int padding = 0; // offset from edges of the map in pixels
+                int padding = 100; // offset from edges of the map in pixels
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
                 map.animateCamera(cu);
+                
             }
 
 

@@ -1993,7 +1993,6 @@ drawable design_password_eye
 drawable design_snackbar_background
 drawable googleg_disabled_color_18
 drawable googleg_standard_color_18
-drawable ic_android
 drawable ic_home
 drawable ic_launcher_background
 drawable ic_launcher_foreground
@@ -2002,6 +2001,8 @@ drawable ic_mtrl_checked_circle
 drawable ic_mtrl_chip_checked_black
 drawable ic_mtrl_chip_checked_circle
 drawable ic_mtrl_chip_close_circle
+drawable ic_navigation
+drawable ic_profile
 drawable material_ic_calendar_black_24dp
 drawable material_ic_clear_black_24dp
 drawable material_ic_edit_black_24dp
@@ -2055,7 +2056,6 @@ id SHOW_PROGRESS
 id SYM
 id TOP_END
 id TOP_START
-id about
 id accelerate
 id accessibility_action_clickable_span
 id accessibility_custom_action_0
@@ -2139,7 +2139,6 @@ id bounce
 id buttonPanel
 id cancel_action
 id cancel_button
-id card_view
 id center
 id center_horizontal
 id center_vertical
@@ -2337,6 +2336,7 @@ id places_autocomplete_try_again
 id places_autocomplete_try_again_progress
 id position
 id postLayout
+id profile
 id progress_circular
 id progress_horizontal
 id radio
@@ -2397,6 +2397,7 @@ id standard
 id start
 id startHorizontal
 id startVertical
+id start_navigation
 id staticLayout
 id staticPostLayout
 id status_bar_latest_event_content

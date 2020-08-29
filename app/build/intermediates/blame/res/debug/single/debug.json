@@ -68,6 +68,10 @@
         "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/mipmap-xxhdpi/elevate_icon.png"
     },
     {
+        "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/drawable_ic_navigation.xml.flat",
+        "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/drawable/ic_navigation.xml"
+    },
+    {
         "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/mipmap-hdpi_elevate_icon_round.png.flat",
         "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/mipmap-hdpi/elevate_icon_round.png"
     },
@@ -76,8 +80,8 @@
         "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/layout/fragment_map_view.xml"
     },
     {
-        "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/drawable_ic_android.xml.flat",
-        "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/drawable/ic_android.xml"
+        "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/drawable_ic_profile.xml.flat",
+        "source": "/Users/shrimatkapoor/Elevate/app/src/main/res/drawable/ic_profile.xml"
     },
     {
         "merged": "/Users/shrimatkapoor/Elevate/app/build/intermediates/res/merged/debug/drawable-v24_ic_launcher_foreground.xml.flat",
