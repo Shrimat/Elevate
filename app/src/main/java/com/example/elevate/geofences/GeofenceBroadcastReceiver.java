@@ -3,24 +3,22 @@ package com.example.elevate.geofences;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.elevate.MapsActivity;
+import com.example.elevate.MainActivity;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = GeofenceBroadcastReceiver.class.getName();
-    private MapsActivity main = null;
+    private MainActivity main = null;
 
-    public void setMainActivityHandler(MapsActivity main){
+    public void setMainActivityHandler(MainActivity main){
         this.main = main;
     }
 

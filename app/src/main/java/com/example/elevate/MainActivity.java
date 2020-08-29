@@ -11,6 +11,9 @@ import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
 import com.example.elevate.maps.MapFragment;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements LocationManager.locationSuccessListener{
@@ -25,6 +28,8 @@ public class MainActivity extends AppCompatActivity implements LocationManager.l
         setContentView(R.layout.activity_main);
         LocationManager.createInstance(LocationServices.getFusedLocationProviderClient(this));
         LocationManager.getInstance().setLocation(this);
+        Places.initialize(getApplicationContext(), BuildConfig.CONSUMER_KEY);
+        PlacesClient placesClient = Places.createClient(this);
         this.bottomNavigationView = findViewById(R.id.bottomNav);
         this.locationViewModel = new ViewModelProvider(this).get(LocationViewModel.class);
         this.mapFragment = new MapFragment();

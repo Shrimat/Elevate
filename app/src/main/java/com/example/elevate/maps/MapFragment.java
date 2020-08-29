@@ -31,10 +31,12 @@ import com.example.elevate.directions.DirectionsTaskParser;
 import com.example.elevate.geofences.GeofenceHelper;
 import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -44,8 +46,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
@@ -63,7 +73,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final int ZOOM = 15;
     private static final String TAG = "MapsFragment";
     private static final int GEOFENCE_RADIUS = 150;
-    private static final int SAMPLING_DISTANCE = 75; //The distance between two consecutive points in metres
+    private static final int SAMPLING_DISTANCE = 75;
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/";
     private static final String ELEVATION_URL = "https://maps.googleapis.com/maps/api/elevation/";
     private static final String JSON_OUTPUT_FORMAT = "json";
@@ -81,15 +91,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         transaction.commit();
 
         fragment.getMapAsync(this);
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+        autocompleteFragment.setCountries("GB");
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.LAT_LNG));
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                builder.include(place.getLatLng());
+                locationViewModel.getCurrentLocation().observe(requireActivity(), location ->
+                        builder.include(new LatLng(location.getLatitude(), location.getLongitude())));
+                LatLngBounds bounds = builder.build();
+                int padding = 0; // offset from edges of the map in pixels
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                map.animateCamera(cu);
+            }
 
-        this.locationViewModel = ((MainActivity) getActivity()).getLocationViewModel();
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        this.locationViewModel = ((MainActivity) requireActivity()).getLocationViewModel();
         this.mapViewModel = new ViewModelProvider(requireActivity()).get(MapViewModel.class);
         this.geofencingClient = LocationServices.getGeofencingClient(requireActivity());
         this.geofenceHelper = new GeofenceHelper(getActivity());
 
         mapViewModel.getPointsToAlertAt().observe(requireActivity(), latLngs -> {
             for (LatLng position : latLngs) {
-                addCircle(position, GEOFENCE_RADIUS);
                 addGeofence(position, GEOFENCE_RADIUS, "ID"+currentID);
                 currentID++;
             }
@@ -102,7 +135,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(requireContext());
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.getUiSettings().setZoomControlsEnabled(true); //Allows for zoom activity on map
+        map.getUiSettings().setZoomControlsEnabled(true);
         enableMyLocation();
         locationViewModel.getCurrentLocation().observe(this, location ->
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
