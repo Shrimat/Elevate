@@ -10,11 +10,16 @@
     <com.google.android.gms.maps.MapView android:id="@+id/mapView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/autocomplete_fragment"
         android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_width="380dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+
+        android:background="@color/quantum_white_100" />
+
     <Button android:id="@+id/start_navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -5,12 +5,12 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,7 +19,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.elevate.BuildConfig;
@@ -29,7 +28,6 @@ import com.example.elevate.TaskRequest;
 import com.example.elevate.TaskRunner;
 import com.example.elevate.directions.DirectionsTaskParser;
 import com.example.elevate.geofences.GeofenceHelper;
-import com.example.elevate.location.LocationManager;
 import com.example.elevate.location.LocationViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
@@ -47,11 +45,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
@@ -74,6 +69,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "MapsFragment";
     private static final int GEOFENCE_RADIUS = 150;
     private static final int SAMPLING_DISTANCE = 75;
+    private static final int MAP_PADDING = 100;
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/";
     private static final String ELEVATION_URL = "https://maps.googleapis.com/maps/api/elevation/";
     private static final String JSON_OUTPUT_FORMAT = "json";
@@ -103,10 +99,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 locationViewModel.getCurrentLocation().observe(requireActivity(), location ->
                         builder.include(new LatLng(location.getLatitude(), location.getLongitude())));
                 LatLngBounds bounds = builder.build();
-                int padding = 100; // offset from edges of the map in pixels
-                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, MAP_PADDING);
                 map.animateCamera(cu);
-                
+                addMarker(place.getLatLng());
+                polylineToMarker(place.getLatLng());
             }
 
 
@@ -136,12 +132,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         MapsInitializer.initialize(requireContext());
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        map.getUiSettings().setZoomControlsEnabled(true);
         enableMyLocation();
         locationViewModel.getCurrentLocation().observe(this, location ->
                 map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(),
                         location.getLongitude()), ZOOM)));
-        addMarkers();
+        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+        RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        layoutParams.setMargins(0, 0, 30, 30);
+        longClick();
     }
 
     @Override
@@ -155,18 +155,22 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    private void addMarkers() {
+    private void longClick() {
         map.setOnMapLongClickListener(latLng -> {
             map.clear();
             geofencingClient.removeGeofences(geofenceHelper.getPendingIntent());
-            MarkerOptions myMarker = new MarkerOptions();
-            myMarker.position(latLng);
-
-            myMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
-
-            map.addMarker(myMarker);
+            addMarker(latLng);
             polylineToMarker(latLng);
         });
+    }
+
+    private void addMarker(LatLng latLng) {
+        MarkerOptions myMarker = new MarkerOptions();
+        myMarker.position(latLng);
+
+        myMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+
+        map.addMarker(myMarker);
     }
 
     private void polylineToMarker(LatLng destination) {
