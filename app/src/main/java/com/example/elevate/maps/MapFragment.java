@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -62,6 +63,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
     private int currentID;
+    private LatLng destination;
     private MapViewModel mapViewModel;
 
     private static final int REQUEST_LOCATION_PERMISSION = 1000;
@@ -69,7 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private static final String TAG = "MapsFragment";
     private static final int GEOFENCE_RADIUS = 150;
     private static final int SAMPLING_DISTANCE = 75;
-    private static final int MAP_PADDING = 100;
+    private static final int MAP_PADDING = 350;
     private static final String DIRECTIONS_URL = "https://maps.googleapis.com/maps/api/directions/";
     private static final String ELEVATION_URL = "https://maps.googleapis.com/maps/api/elevation/";
     private static final String JSON_OUTPUT_FORMAT = "json";
@@ -85,7 +87,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment fragment = new SupportMapFragment();
         transaction.add(R.id.mapView, fragment);
         transaction.commit();
-
         fragment.getMapAsync(this);
         AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
                 getChildFragmentManager().findFragmentById(R.id.autocomplete_fragment);
@@ -94,6 +95,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
+                map.clear();
+                geofencingClient.removeGeofences(geofenceHelper.getPendingIntent());
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
                 builder.include(place.getLatLng());
                 locationViewModel.getCurrentLocation().observe(requireActivity(), location ->
@@ -102,7 +105,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, MAP_PADDING);
                 map.animateCamera(cu);
                 addMarker(place.getLatLng());
-                polylineToMarker(place.getLatLng());
+                destination = place.getLatLng();
             }
 
 
@@ -110,6 +113,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onError(Status status) {
                 // TODO: Handle the error.
                 Log.i(TAG, "An error occurred: " + status);
+            }
+        });
+
+        ImageButton button = (ImageButton) view.findViewById(R.id.start_navigation);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                polylineToMarker(destination);
             }
         });
 
@@ -160,7 +170,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             map.clear();
             geofencingClient.removeGeofences(geofenceHelper.getPendingIntent());
             addMarker(latLng);
-            polylineToMarker(latLng);
+            destination = latLng;
         });
     }
 
